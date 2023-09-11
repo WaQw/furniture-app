@@ -4,11 +4,15 @@ import styles from './productCardView.style'
 import p1 from "../../assets/images/fn1.jpg"
 import { Ionicons } from '@expo/vector-icons'
 import { COLORS } from "../../constants"
+import { useNavigation } from '@react-navigation/native'
 
 const ProductCardView = () => {
+
     const DEFAULT_IMAGE = Image.resolveAssetSource(p1).uri;
+    const navigation = useNavigation();
+
     return (
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity onPress={() => navigation.navigate("ProductDetails")}>
            <View style={styles.container}>
                 <View style={styles.imageContainer}>
                     <Image source={{uri: DEFAULT_IMAGE}} style={styles.image} />
