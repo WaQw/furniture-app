@@ -1,13 +1,15 @@
 import { TouchableOpacity, View, Image, Text } from 'react-native'
 import React, { useState } from 'react'
+import { useRoute } from '@react-navigation/native'
 import { Ionicons, SimpleLineIcons, MaterialCommunityIcons, Fontisto } from '@expo/vector-icons'
 import { COLORS, SIZES} from "../constants"
-import p1 from "../assets/images/fn1.jpg"
 import styles from './productDetails.style'
 
 const ProductDetails = ({navigation}) => {
 
-    const DEFAULT_IMAGE = Image.resolveAssetSource(p1).uri;
+    const route = useRoute();
+    const {item} = route.params;
+
     const [count, setCount] = useState(1)
 
     const increment = () => {
@@ -32,13 +34,13 @@ const ProductDetails = ({navigation}) => {
                 </TouchableOpacity>
             </View>
 
-            <Image source={{uri: DEFAULT_IMAGE}} style={styles.image} />
+            <Image source={{uri: item.imageUrl}} style={styles.image} />
 
             <View style={styles.details}>
                 <View style={styles.titleRow}>
-                    <Text style={styles.title}>Product</Text>
+                    <Text style={styles.title}>{item.title}</Text>
                     <View style={styles.priceWrapper}>
-                        <Text style={styles.price}>$ 660.88</Text>
+                        <Text style={styles.price}>$ {item.price}</Text>
                     </View>
                 </View>
 
@@ -65,7 +67,7 @@ const ProductDetails = ({navigation}) => {
                 <View style={styles.descriptionWrapper}>
                     <Text style={styles.description}>Description</Text>
                     <Text style={styles.descText}>
-                        "I'll talk to you tomorrow in more detail at our meeting, but I think I've found a solution to our problem. It's not exactly legal, but it won't land us in jail for the rest of our lives either. Are you willing to take the chance?" Monroe asked his partner over the phone.
+                        {item.description}
                     </Text>
                 </View>
 
@@ -73,7 +75,7 @@ const ProductDetails = ({navigation}) => {
                     <View style={styles.location}>
                         <View style={{flexDirection: "row"}}>
                             <Ionicons name='location-outline' size={20} />
-                            <Text>  89 McGill St</Text>
+                            <Text>  {item.product_location}</Text>
                         </View>
 
                         <View style={{flexDirection: "row"}}>
