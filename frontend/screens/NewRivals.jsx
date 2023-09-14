@@ -5,6 +5,7 @@ import styles from './newRivals.style'
 import { Ionicons } from '@expo/vector-icons'
 import { COLORS, SIZES} from "../constants"
 import { useRoute } from '@react-navigation/native'
+import ProductList from '../components/products/ProductList'
 
 const NewRivals = ({navigation}) => {
     return (
@@ -17,6 +18,8 @@ const NewRivals = ({navigation}) => {
 
                     <Text style={styles.heading}> Products </Text>
                 </View>
+
+                <ProductList/>
             </View>
         </SafeAreaView>
     )
