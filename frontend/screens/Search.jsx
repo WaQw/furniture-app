@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { Feather, Ionicons } from '@expo/vector-icons'
 import styles from "./search.style"
 import axios from 'axios'
+import SearchTile from '../components/products/SearchTile'
 
 const Search = () => {
     const [searchKey, setSearchKey] = useState('');
@@ -48,7 +49,8 @@ const Search = () => {
                 <FlatList
                     data={searchResults}
                     keyExtractor={(item) => item._id}
-                    renderItem={({item}) => (<Text>{item.title}</Text>)}
+                    renderItem={({item}) => (<SearchTile item={item}/>)}
+                    style={{marginHorizontal: 12}}
                 />
             )}
 
