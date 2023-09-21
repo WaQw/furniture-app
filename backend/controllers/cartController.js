@@ -11,7 +11,7 @@ module.exports = {
                     (product) => product.cartItem.toString() === cartItem
                 );
                 if(existingProduct) {
-                    existingProduct.quantity += 1
+                    existingProduct.quantity += parseInt(quantity)
                 } else {
                     cart.products.push({cartItem, quantity})
                 }
@@ -45,7 +45,7 @@ module.exports = {
 
 
     deleteCartItem: async (req, res) => {
-        const cartItemId = req.params.cartItemId;
+        const cartItemId = req.params.cartItemId; // specific product id in cart
 
         try {
             const updatedCart = await Cart.findOneAndUpdate(
