@@ -4,7 +4,7 @@ import styles from './profile.style'
 import { StatusBar } from 'expo-status-bar'
 import { COLORS, SIZES} from "../constants"
 
-const Profile = () => {
+const Profile = ({navigation}) => {
 
     const [userData, setUserData] = useState(null)
     const [userLogin, setUserLogin] = useState(false)
@@ -28,7 +28,7 @@ const Profile = () => {
                         {userLogin === true ? userData.name : "Please login into your account"}
                     </Text>
                     {userLogin === false ? (
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
                             <View style={styles.loginBtn}>
                                 <Text style={styles.menuText}>L O G I N    </Text>
                             </View>
