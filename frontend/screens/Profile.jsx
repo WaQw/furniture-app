@@ -78,7 +78,7 @@ const Profile = ({navigation}) => {
                         <View></View>
                     ) : (
                         <View style={styles.menuWrapper}>
-                            <TouchableOpacity onPress={() => {}}>
+                            <TouchableOpacity onPress={() => navigation.navigate('Favourites')}>
                                 <View style={styles.menuItem(0.2)}>
                                     <MaterialCommunityIcons 
                                         name="heart-outline" 
@@ -88,7 +88,7 @@ const Profile = ({navigation}) => {
                                     <Text style={styles.menuText}>Favorites</Text>
                                 </View>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => {}}>
+                            <TouchableOpacity onPress={() => navigation.navigate('Orders')}>
                                 <View style={styles.menuItem(0.2)}>
                                     <MaterialCommunityIcons 
                                         name="truck-delivery-outline" 
@@ -98,7 +98,7 @@ const Profile = ({navigation}) => {
                                     <Text style={styles.menuText}>Orders</Text>
                                 </View>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => {}}>
+                            <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
                                 <View style={styles.menuItem(0.2)}>
                                     <SimpleLineIcons 
                                         name="bag" 

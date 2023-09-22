@@ -5,6 +5,8 @@ import Cart from "./Cart";
 import ProductDetails from "./ProductDetails";
 import NewRivals from "./NewRivals";
 import LoginPage from "./LoginPage";
+import Orders from "./Orders";
+import Favourites from "./Favourites";
 
 export {
     Home,
@@ -13,7 +15,9 @@ export {
     Cart,
     ProductDetails,
     NewRivals,
-    LoginPage
+    LoginPage,
+    Orders,
+    Favourites
 }
 
 // for simplicity in other file's import
