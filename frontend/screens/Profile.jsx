@@ -1,4 +1,4 @@
-import { Image, Text, TouchableOpacity, View } from 'react-native'
+import { Image, Text, TouchableOpacity, View, Alert } from 'react-native'
 import React, {useState, useEffect} from 'react'
 import styles from './profile.style'
 import { StatusBar } from 'expo-status-bar'
@@ -9,6 +9,42 @@ const Profile = ({navigation}) => {
 
     const [userData, setUserData] = useState(null)
     const [userLogin, setUserLogin] = useState(true)
+
+    const logout = () => {
+        Alert.alert(
+            "Logout",
+            "Are you sure you want to logout?",
+            [
+                {text: "Cancel", onPress: () => console.log()},
+                {text: "Continue", onPress: () => console.log()},
+                {defaultIndex: 1}
+            ]
+        )
+    }
+
+    const clearCache = () => {
+        Alert.alert(
+            "Clear Cache",
+            "Are you sure you want to delete all saved data on your device?",
+            [
+                {text: "Cancel", onPress: () => console.log()},
+                {text: "Continue", onPress: () => console.log()},
+                {defaultIndex: 1}
+            ]
+        )
+    }
+
+    const deleteAccount = () => {
+        Alert.alert(
+            "Delete Account",
+            "Are you sure you want to delete your account?",
+            [
+                {text: "Cancel", onPress: () => console.log()},
+                {text: "Continue", onPress: () => console.log()},
+                {defaultIndex: 1}
+            ]
+        )
+    }
 
     return (
         <View style={styles.container}>
@@ -72,7 +108,7 @@ const Profile = ({navigation}) => {
                                     <Text style={styles.menuText}>Cart</Text>
                                 </View>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => {}}>
+                            <TouchableOpacity onPress={() => clearCache()}>
                                 <View style={styles.menuItem(0.2)}>
                                     <MaterialCommunityIcons 
                                         name="cached" 
@@ -82,7 +118,7 @@ const Profile = ({navigation}) => {
                                     <Text style={styles.menuText}>Clear Cache</Text>
                                 </View>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => {}}>
+                            <TouchableOpacity onPress={() => deleteAccount()}>
                                 <View style={styles.menuItem(0.2)}>
                                     <AntDesign 
                                         name="deleteuser" 
@@ -92,7 +128,7 @@ const Profile = ({navigation}) => {
                                     <Text style={styles.menuText}>Delete Account</Text>
                                 </View>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => {}}>
+                            <TouchableOpacity onPress={() => logout()}>
                                 <View style={styles.menuItem(0.2)}>
                                     <AntDesign 
                                         name="logout" 
