@@ -8,6 +8,7 @@ import * as Yup from 'yup'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { COLORS } from '../constants'
 import axios from 'axios'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const validationSchema = Yup.object().shape({
     password: Yup.string()
@@ -43,7 +44,12 @@ const LoginPage = ({navigation}) => {
             const response = await axios.post(endpoint, data)
             if(response.status === 200) {
                 setLoader(false);
-                setResponseData(response.data)
+                setResponseData(response.data);
+
+                await AsyncStorage.setItem(`user${responseData._id}`, JSON.stringify(responseData))
+                await AsyncStorage.setItem('id', JSON.stringify(responseData._id))
+                navigation.replace('Bottom Navigation')
+
             } else {
                 Alert.alert(
                     "Error logging in",
