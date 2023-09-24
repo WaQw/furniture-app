@@ -4,12 +4,34 @@ import styles from './profile.style'
 import { StatusBar } from 'expo-status-bar'
 import { COLORS, SIZES} from "../constants"
 import { AntDesign, MaterialCommunityIcons, SimpleLineIcons } from '@expo/vector-icons'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Profile = ({navigation}) => {
 
     const [userData, setUserData] = useState(null)
     const [userLogin, setUserLogin] = useState(false)
 
+    useEffect(() => {
+        checkExistingUser();
+    }, []);
+
+    const checkExistingUser = async() => {
+        const id = await AsyncStorage.getItem('id')
+        const userId = `user${JSON.parse(id)}`
+
+        try {
+            const currentUser = await AsyncStorage.getItem(userId);
+            if(currentUser !==  null) {
+                setUserData(JSON.parse(currentUser))
+                setUserLogin(true)
+            } else {
+                navigation.navigate('Login')
+            }
+        } catch (error) {
+            
+        }
+    }
+    
     const logout = () => {
         Alert.alert(
             "Logout",
@@ -62,7 +84,7 @@ const Profile = ({navigation}) => {
                         style={styles.profile}
                     />
                     <Text style={styles.name}>
-                        {userLogin === true ? "Angela" : "Please login into your account"}
+                        {userLogin === true ? userData.username : "Please login into your account"}
                     </Text>
                     {userLogin === false ? (
                         <TouchableOpacity onPress={() => navigation.navigate('Login')}>
@@ -71,7 +93,7 @@ const Profile = ({navigation}) => {
                             </View>
                         </TouchableOpacity>
                     ) : (<View style={styles.loginBtn}>
-                            <Text style={styles.menuText}>angela@outlook.com    </Text>
+                            <Text style={styles.menuText}>{userData.email}    </Text>
                         </View>
                     ) }
                     {userLogin === false ? (
