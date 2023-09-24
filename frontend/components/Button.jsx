@@ -2,9 +2,9 @@ import {StyleSheet, TouchableOpacity, View, Text} from 'react-native'
 import React from 'react'
 import { COLORS, SIZES } from '../constants'
 
-const Button = ({title, onPress}) => {
+const Button = ({title, onPress, isValid}) => {
     return (
-        <TouchableOpacity style={styles.btnStyle} onPress={onPress}>
+        <TouchableOpacity style={styles.btnStyle(isValid ? COLORS.primary: COLORS.gray)} onPress={onPress}>
             <Text style={styles.btnTxt}>
                 {title}
             </Text>
@@ -20,13 +20,13 @@ const styles = StyleSheet.create({
         color: COLORS.white,
         fontSize: 18
     },
-    btnStyle: {
+    btnStyle: (backgroundColor) => ({
         height: 50,
         width: '100%',
         marginVertical: 20,
-        backgroundColor: COLORS.primary,
+        backgroundColor: backgroundColor,
         justifyContent: "center",
         alignItems: "center",
         borderRadius: 12
-    }
+    })
 })
