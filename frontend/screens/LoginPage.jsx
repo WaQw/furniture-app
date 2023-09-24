@@ -7,6 +7,7 @@ import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { COLORS } from '../constants'
+import axios from 'axios'
 
 const validationSchema = Yup.object().shape({
     password: Yup.string()
@@ -33,6 +34,42 @@ const LoginPage = ({navigation}) => {
         )
     }
 
+    const login = async(values) => {
+        setLoader(true)
+        try {
+            const endpoint = "http://localhost:3000/api/login"
+            const data = values;
+
+            const response = await axios.post(endpoint, data)
+            if(response.status === 200) {
+                setLoader(false);
+                setResponseData(response.data)
+            } else {
+                Alert.alert(
+                    "Error logging in",
+                    "Please provide valid credentials",
+                    [
+                        {text: "Cancel", onPress: () => console.log()},
+                        {text: "Continue", onPress: () => console.log()},
+                        {defaultIndex: 1}
+                    ]
+                )
+            }
+        } catch (error) {
+            Alert.alert(
+                "Error",
+                "Oops, Error logging in, try again with correct credentials!",
+                [
+                    {text: "Cancel", onPress: () => console.log()},
+                    {text: "Continue", onPress: () => console.log()},
+                    {defaultIndex: 1}
+                ]
+            )
+        } finally {
+            setLoader(false);
+        }
+    };
+
     return (
         <ScrollView>
             <SafeAreaView style={{marginHorizontal: 20}}>
@@ -50,6 +87,7 @@ const LoginPage = ({navigation}) => {
                     <Formik
                         initialValues={{email: '', password: ''}}
                         validationSchema={validationSchema}
+                        onSubmit={(values) => login(values)}
                     >
                         {({ handleChange, handleBlur, handleSubmit, values, errors, isValid, setFieldTouched, touched }) => (
                             <View>
@@ -110,7 +148,7 @@ const LoginPage = ({navigation}) => {
                                     )}
                                 </View>
 
-                                <Button title={"L O G I N"} onPress={isValid ? handleSubmit: inValidForm} isValid={isValid} />
+                                <Button loader={loader} title={"L O G I N"} onPress={isValid ? handleSubmit: inValidForm} isValid={isValid} />
 
                                 <Text style={styles.registration} onPress={() => navigation.navigate('SignUp')}>Register</Text>
                             </View>
