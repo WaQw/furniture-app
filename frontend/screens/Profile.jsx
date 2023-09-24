@@ -31,6 +31,18 @@ const Profile = ({navigation}) => {
             
         }
     }
+
+    const userLogout = async() => {
+        const id = await AsyncStorage.getItem('id')
+        const userId = `user${JSON.parse(id)}`
+
+        try {
+            await AsyncStorage.multiRemove([userId, 'id']);
+            navigation.replace('Bottom Navigation')
+        } catch (error) {
+            
+        }
+    }
     
     const logout = () => {
         Alert.alert(
@@ -38,7 +50,7 @@ const Profile = ({navigation}) => {
             "Are you sure you want to logout?",
             [
                 {text: "Cancel", onPress: () => console.log()},
-                {text: "Continue", onPress: () => console.log()},
+                {text: "Continue", onPress: () => userLogout()},
                 {defaultIndex: 1}
             ]
         )
