@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
         fontSize: SIZES.xLarge - 1,
         color: COLORS.primary,
         alignItems: "center",
-        marginBottom: SIZES.xxLarge
+        marginBottom: SIZES.xLarge
     },
     wrapper: {
         marginBottom: 20,
@@ -33,7 +33,8 @@ const styles = StyleSheet.create({
         borderRadius: 12,
         flexDirection: "row",
         paddingHorizontal: 15,
-        alignItems: "center"
+        alignItems: "center",
+        marginBottom: 15
     }),
     iconStyle: {
         marginRight: 10
@@ -44,6 +45,10 @@ const styles = StyleSheet.create({
         marginTop: 5,
         marginLeft: 5,
         fontSize: SIZES.xSmall
+    },
+    registration: {
+        marginTop: 10,
+        textAlign: "center"
     }
 })
 

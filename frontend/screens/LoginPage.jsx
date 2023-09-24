@@ -13,7 +13,7 @@ const validationSchema = Yup.object().shape({
       .min(8, 'Password must be at least 8 characters')
       .required('Required'),
     email: Yup.string().email('Provide a valid email address').required('Required'),
-  })
+})
 
 const LoginPage = ({navigation}) => {
 
@@ -111,6 +111,8 @@ const LoginPage = ({navigation}) => {
                                 </View>
 
                                 <Button title={"L O G I N"} onPress={isValid ? handleSubmit: inValidForm} isValid={isValid} />
+
+                                <Text style={styles.registration} onPress={() => navigation.navigate('SignUp')}>Register</Text>
                             </View>
                         )}
                     </Formik>
