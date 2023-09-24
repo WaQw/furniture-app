@@ -7,6 +7,7 @@ import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons'
 import { COLORS, SIZES } from '../constants'
+import axios from 'axios'
 
 const validationSchema = Yup.object().shape({
     password: Yup.string()
@@ -34,6 +35,26 @@ const SignUp = ({navigation}) => {
         )
     }
 
+    const registerUser = async(values) => {
+        setLoader(true)
+
+        try {
+            const endpoint = 'http://localhost:3000/api/register';
+            const data = values;
+
+            const response = await axios.post(endpoint, data)
+
+            if(response.status === 201) {
+                setLoader(false);
+                navigation.replace('Login')
+            } else {
+
+            }
+        } catch (error) {
+            
+        }
+    }
+
     return (
         <ScrollView>
         <SafeAreaView style={{marginHorizontal: 20}}>
@@ -56,6 +77,7 @@ const SignUp = ({navigation}) => {
                 <Formik
                     initialValues={{email: '', password: '', location: '', username: ''}}
                     validationSchema={validationSchema}
+                    onSubmit={(values) => registerUser(values)}
                 >
                     {({ handleChange, handleBlur, handleSubmit, values, errors, isValid, setFieldTouched, touched }) => (
                         <View>
@@ -166,7 +188,7 @@ const SignUp = ({navigation}) => {
                                 )}
                             </View>
 
-                            <Button title={"S I G N U P"} onPress={isValid ? handleSubmit: inValidForm} isValid={isValid} />
+                            <Button title={"S I G N U P"} onPress={isValid ? handleSubmit: inValidForm} isValid={isValid} loader={loader}/>
 
                         </View>
                     )}
