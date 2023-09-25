@@ -4,6 +4,7 @@ import { useRoute } from '@react-navigation/native'
 import { Ionicons, SimpleLineIcons, MaterialCommunityIcons, Fontisto } from '@expo/vector-icons'
 import { COLORS, SIZES} from "../constants"
 import styles from './productDetails.style'
+import AddToCart from '../hook/AddToCart'
 
 const ProductDetails = ({navigation}) => {
 
@@ -90,7 +91,7 @@ const ProductDetails = ({navigation}) => {
                         <Text style={styles.cartTitle}>BUY NOW</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => {}} style={styles.addCart}>
+                    <TouchableOpacity onPress={() => AddToCart(item._id, count)} style={styles.addCart}>
                         <Fontisto name='shopping-bag' size={22} color={COLORS.lightWhite} />
                     </TouchableOpacity>
                 </View>
