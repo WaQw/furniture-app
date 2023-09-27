@@ -31,7 +31,7 @@ const ProductDetails = ({navigation}) => {
 
     const checkUser = async() => {
         try {
-            const id = AsyncStorage.getItem('id');
+            const id = await AsyncStorage.getItem('id');
             if(id !== null) {
                 setIsLoggedIn(true)
                 console.log('user logged in')
@@ -44,7 +44,6 @@ const ProductDetails = ({navigation}) => {
     }
 
     const handlePress = () => {
-        console.log(isLoggedIn)
         if(isLoggedIn === false) {
             navigation.navigate('Login')
         } else {
