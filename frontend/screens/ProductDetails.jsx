@@ -47,7 +47,7 @@ const ProductDetails = ({navigation}) => {
 
     const addToFavorites = async() => {
         const id = await AsyncStorage.getItem('id');
-        const favoritesId = `favorites${JSON.parse(id)}`
+        const favoritesId = `favorites${JSON.parse(id)}`;
 
         let productId = item._id;
         let productObj = {
@@ -60,7 +60,7 @@ const ProductDetails = ({navigation}) => {
         };
 
         try {
-            const existingItem = await AsyncStorage.getItem(favoritesId);
+            const existingItem = await AsyncStorage.getItem(favoritesId); /* user's favs */
             let favoritesObj = existingItem ? JSON.parse(existingItem) : {};
 
             if(favoritesObj[productId]) {
