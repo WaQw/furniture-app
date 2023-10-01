@@ -14,6 +14,7 @@ const ProductDetails = ({navigation}) => {
 
     const [count, setCount] = useState(1);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [favorites, setFavorites] = useState(false);
 
     const increment = () => {
         setCount(count + 1)
@@ -27,6 +28,7 @@ const ProductDetails = ({navigation}) => {
 
     useEffect(() => {
         checkUser();
+        checkFavorites();
     },[]);
 
     const checkUser = async() => {
@@ -43,11 +45,43 @@ const ProductDetails = ({navigation}) => {
         }
     }
 
+    const addToFavorites = async() => {
+        const id = await AsyncStorage.getItem('id');
+        const favoritesId = `favorites${JSON.parse(id)}`
+
+        let productId = item._id;
+        let productObj = {
+            title: item.title,
+            id: item._id,
+            supplier: item.supplier,
+            price: item.price,
+            imageUrl: item.imageUrl,
+            product_location: item.product_location,
+        };
+
+        try {
+            const existingItem = await AsyncStorage.getItem(favoritesId);
+            let favoritesObj = existingItem ? JSON.parse(existingItem) : {};
+
+            if(favoritesObj[productId]) {
+                delete favoritesObj[productId];
+                setFavorites(false);
+            } else {
+                favoritesObj[productId] = productObj;
+                setFavorites(true);
+            }
+
+            await AsyncStorage.setItem(favoritesId, JSON.stringify(favoritesObj));
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     const handlePress = () => {
         if(isLoggedIn === false) {
             navigation.navigate('Login')
         } else {
-        
+            addToFavorites();
         }
     }
 
@@ -67,6 +101,23 @@ const ProductDetails = ({navigation}) => {
         }
     }
 
+    const checkFavorites = async() => {
+        const id = await AsyncStorage.getItem("id");
+        const favoritesId = `favorites${JSON.parse(id)}`
+
+        try {
+            const favoritesObj = await AsyncStorage.getItem(favoritesId);
+            if(favoritesObj !== null) {
+                const favorites = JSON.parse(favoritesObj);
+                if(favorites[item._id]) {
+                    setFavorites(true)
+                }
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.upperRow}>
@@ -75,7 +126,7 @@ const ProductDetails = ({navigation}) => {
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={() => handlePress()}>
-                    <Ionicons name='heart' size={30} color={COLORS.primary} />
+                    <Ionicons name={favorites ? 'heart' : 'heart-outline'} size={30} color={COLORS.primary} />
                 </TouchableOpacity>
             </View>
 
