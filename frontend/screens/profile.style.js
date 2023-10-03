@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     name: {
         fontFamily: "bold",
         color: COLORS.primary,
-        marginVertical: 5
+        marginVertical: 8
     },
     loginBtn: {
         backgroundColor: COLORS.secondary,
@@ -42,10 +42,10 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         fontWeight: '600',
         fontSize: 14,
-        lineHeight: 26
+        lineHeight: 25
     },
     menuWrapper: {
-        marginTop: SIZES.xLarge,
+        marginTop: SIZES.small,
         width: SIZES.width - SIZES.large,
         backgroundColor: COLORS.lightWhite,
         borderRadius: 12

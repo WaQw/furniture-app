@@ -86,13 +86,13 @@ const Profile = ({navigation}) => {
                 <StatusBar backgroundColor={COLORS.gray}/>
                 <View style={{width: '100%'}}>
                     <Image 
-                        source={require('../assets/images/space.jpg')}
+                        source={require('../assets/images/sky.jpg')}
                         style={styles.cover}
                     />
                 </View>
                 <View style={styles.profileContainer}>
                     <Image 
-                        source={require('../assets/images/profile.jpeg')}
+                        source={require('../assets/images/girlpic.jpg')}
                         style={styles.profile}
                     />
                     <Text style={styles.name}>
