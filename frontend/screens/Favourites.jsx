@@ -1,7 +1,10 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import styles from './favourites.style'
+import { Ionicons, SimpleLineIcons } from '@expo/vector-icons'
+import { SIZES, COLORS } from '../constants'
 
 const Favourites = ({navigation}) => {
     const [favData, setFavData] = useState([]);
@@ -13,7 +16,7 @@ const Favourites = ({navigation}) => {
 
     const checkFavorites = async() => {
         const id = await AsyncStorage.getItem("id");
-        const favoritesId = `favorites${JSON.parse(id)}`
+        const favoritesId = `favorites${JSON.parse(id)}`;
 
         try {
             const favoritesObj = await AsyncStorage.getItem(favoritesId);
@@ -21,7 +24,6 @@ const Favourites = ({navigation}) => {
                 const favorites = JSON.parse(favoritesObj);
                 const favList = Object.values(favorites);
                 setFavData(favList);
-                console.log(favList.length);
             }
         } catch (error) {
             console.log(error)
@@ -29,8 +31,8 @@ const Favourites = ({navigation}) => {
     }
 
     const deleteFavorites = async(product) => {
-        const id = await AsyncStorage.getItem('id');
-        const favoritesId = `favorites${JSON.parse(id)}`
+        const id = await AsyncStorage.getItem("id");
+        const favoritesId = `favorites${JSON.parse(id)}`;
 
         let productId = product;
 
@@ -40,7 +42,7 @@ const Favourites = ({navigation}) => {
 
             if(favoritesObj[productId]) {
                 delete favoritesObj[productId];
-                navigation.goBack();
+                checkFavorites();
             } 
 
             await AsyncStorage.setItem(favoritesId, JSON.stringify(favoritesObj));
@@ -50,12 +52,47 @@ const Favourites = ({navigation}) => {
     }
 
     return (
-        <SafeAreaView>
-            <Text>Favourites</Text>
+        <SafeAreaView style={styles.container}>
+            <View style={styles.titleRow}>
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <Ionicons
+                        name='chevron-back-circle'
+                        size={30}
+                        color={COLORS.primary}
+                    />
+                </TouchableOpacity>
+
+                <Text style={styles.titleText}>Favorites</Text>
+            </View>
+
+            <FlatList
+                data={favData}
+                renderItem={({ item }) => (
+                    <View style={styles.favContainer}>
+                        <View style={styles.imageContainer}>
+                            <Image source={{uri: item.imageUrl}} style={styles.image}/>
+                        </View>
+
+                        <View style={styles.textContainer}>
+                            <Text style={styles.fav}>{item.title}</Text>
+                            <Text style={styles.supplier}>{item.supplier}</Text>
+                            <Text style={styles.supplier}>$ {item.price}</Text>
+                        </View>
+
+                        <TouchableOpacity>
+                            <SimpleLineIcons 
+                                onPress={() => deleteFavorites(item.id)}
+                                name='trash'
+                                size={20}
+                                color={COLORS.red}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                )}
+                keyExtractor={(item, index) => index.toString()}
+            />
         </SafeAreaView>
     )
 }
 
 export default Favourites
-
-const styles = StyleSheet.create({})
