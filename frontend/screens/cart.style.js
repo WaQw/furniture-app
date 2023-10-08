@@ -19,17 +19,17 @@ const styles = StyleSheet.create({
         letterSpacing:2,
         marginLeft: SIZES.small
     },
-    favContainer: {
+    favContainer: (color) => ({
         flex: 1,
-        justifyContent: "space-between",
+        justifyContent: "flex-start",
         alignItems: "center",
         flexDirection: "row",
         marginBottom: SIZES.xSmall,
         padding: SIZES.medium,
         borderRadius: SIZES.small,
-        backgroundColor: "#FFF",
+        backgroundColor: color,
         shadowColor: COLORS.secondary
-    },
+    }),
     imageContainer: {
         width: 70,
         borderRadius: SIZES.medium,
@@ -42,6 +42,22 @@ const styles = StyleSheet.create({
         borderRadius: SIZES.small,
         resizeMode: "cover"
     },
+    textContainer: {
+        flex: 1,
+        marginHorizontal: SIZES.medium
+    },
+    productTxt: {
+        fontSize: SIZES.medium,
+        fontFamily: "bold",
+        color: COLORS.primary
+    },
+    supplier: {
+        fontSize: SIZES.small + 2,
+        fontFamily: "regular",
+        color: COLORS.gray,
+        marginTop: 3,
+        textTransform: "capitalize"
+    }
 })
 
 export default styles

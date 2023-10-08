@@ -3,12 +3,15 @@ import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import styles from './cart.style'
 import { Ionicons, SimpleLineIcons } from '@expo/vector-icons'
-import { COLORS } from '../constants'
 import fetchCart from '../hook/fetchCart'
+import { CartTile } from '../components'
+import { COLORS } from '../constants'
+import { useState } from 'react'
 
 const Cart = ({navigation}) => {
     const {data, loading, error, refetch} = fetchCart();
-    console.log(data)
+    const [selected, setSelected] = useState(null);
+    const [select, setSelect] = useState(false);
 
     return (
         <SafeAreaView style={styles.container}>
@@ -28,7 +31,7 @@ const Cart = ({navigation}) => {
                 <FlatList 
                     data = {data}
                     keyExtractor={(item) => item._id}
-                    renderItem={({item}) => <Text>{item.cartItem.title}</Text>}
+                    renderItem={({item}) => <CartTile item={item} onPress={() => {setSelect(!select), setSelected(item)}} select={select}/>}
                 />
             )}
 
