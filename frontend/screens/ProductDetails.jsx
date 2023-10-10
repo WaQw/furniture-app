@@ -1,4 +1,4 @@
-import { TouchableOpacity, View, Image, Text } from 'react-native'
+import { TouchableOpacity, View, Image, Text, SafeAreaView } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { useRoute } from '@react-navigation/native'
 import { Ionicons, SimpleLineIcons, MaterialCommunityIcons, Fontisto } from '@expo/vector-icons'
@@ -6,6 +6,7 @@ import { COLORS, SIZES} from "../constants"
 import styles from './productDetails.style'
 import AddToCart from '../hook/AddToCart'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import WebView from 'react-native-webview'
 
 const ProductDetails = ({navigation}) => {
 
@@ -15,6 +16,7 @@ const ProductDetails = ({navigation}) => {
     const [count, setCount] = useState(1);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [favorites, setFavorites] = useState(false);
+    const [paymentUrl, setPaymentUrl] = useState(false);
 
     const increment = () => {
         setCount(count + 1)
@@ -42,6 +44,38 @@ const ProductDetails = ({navigation}) => {
             }
         } catch (error) {
             
+        }
+    }
+
+    const checkout = async() => {
+        const id = await AsyncStorage.getItem('id')
+        const response = await fetch('https://payment-server-production-0699.up.railway.app/stripe/create-checkout-session', {
+            method: 'POST',
+            headers: {
+                'Content-Type':'application/json'
+            },
+            body: JSON.stringify({
+                userId: JSON.parse(id),
+                cartItems: [{
+                    name: item.title,
+                    id: item._id,
+                    price: item.price,
+                    cartQuantity: count,
+                }]
+            })
+        });
+
+        const {url} = await response.json();
+        setPaymentUrl(url)
+    }
+
+    const onNavigationStateChange = (webViewState) => {
+        const {url} = webViewState;
+
+        if(url && url.includes('checkout-success')) {
+            navigation.navigate("Orders")
+        } else if(url && url.includes('cancel')) {
+            navigation.goBack()
         }
     }
 
@@ -89,7 +123,7 @@ const ProductDetails = ({navigation}) => {
         if(isLoggedIn === false) {
             navigation.navigate('Login')
         } else {
-            
+            checkout();
         }
     }
 
@@ -120,78 +154,90 @@ const ProductDetails = ({navigation}) => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.upperRow}>
-                <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Ionicons name='chevron-back-circle' size={30}/>
-                </TouchableOpacity>
-
-                <TouchableOpacity onPress={() => handlePress()}>
-                    <Ionicons name={favorites ? 'heart' : 'heart-outline'} size={30} color={COLORS.primary} />
-                </TouchableOpacity>
-            </View>
-
-            <Image source={{uri: item.imageUrl}} style={styles.image} />
-
-            <View style={styles.details}>
-                <View style={styles.titleRow}>
-                    <Text style={styles.title}>{item.title}</Text>
-                    <View style={styles.priceWrapper}>
-                        <Text style={styles.price}>$ {item.price}</Text>
-                    </View>
-                </View>
-
-                <View style={styles.ratingRow}>
-                    <View style={styles.rating}>
-                        {[1,2,3,4,5].map((index) => (
-                            <Ionicons key={index} name='star' size={24} color="gold" />
-                        ))}
-
-                        <Text style={styles.ratingText}>(4.9)</Text>
-                    </View>
-
-                    <View style={styles.rating}>
-                        <TouchableOpacity onPress={() => increment()}>
-                            <SimpleLineIcons name='plus' size={20} />
+            {paymentUrl ? (
+                <SafeAreaView style={{flex: 1, backgroundColor: "white"}}>
+                    <WebView
+                        source={{uri: paymentUrl}}
+                        onNavigationStateChange={onNavigationStateChange}
+                    />
+                </SafeAreaView>
+                ) : (
+                <View styles={styles.container}>
+                    <View style={styles.upperRow}>
+                        <TouchableOpacity onPress={() => navigation.goBack()}>
+                            <Ionicons name='chevron-back-circle' size={30}/>
                         </TouchableOpacity>
-                        <Text style={styles.ratingText}>{count}</Text>
-                        <TouchableOpacity onPress={() => decrement()}>
-                            <SimpleLineIcons name='minus' size={20} />
+
+                        <TouchableOpacity onPress={() => handlePress()}>
+                            <Ionicons name={favorites ? 'heart' : 'heart-outline'} size={30} color={COLORS.primary} />
                         </TouchableOpacity>
                     </View>
-                </View>
 
-                <View style={styles.descriptionWrapper}>
-                    <Text style={styles.description}>Description</Text>
-                    <Text style={styles.descText}>
-                        {item.description}
-                    </Text>
-                </View>
+                    <Image source={{uri: item.imageUrl}} style={styles.image} />
 
-                <View style={{marginBottom: SIZES.small}}>
-                    <View style={styles.location}>
-                        <View style={{flexDirection: "row"}}>
-                            <Ionicons name='location-outline' size={20} />
-                            <Text>  {item.product_location}</Text>
+                    <View style={styles.details}>
+                        <View style={styles.titleRow}>
+                            <Text style={styles.title}>{item.title}</Text>
+                            <View style={styles.priceWrapper}>
+                                <Text style={styles.price}>$ {item.price}</Text>
+                            </View>
                         </View>
 
-                        <View style={{flexDirection: "row"}}>
-                            <MaterialCommunityIcons name='truck-delivery-outline' size={20} />
-                            <Text>  Free delivery   </Text>
+                        <View style={styles.ratingRow}>
+                            <View style={styles.rating}>
+                                {[1,2,3,4,5].map((index) => (
+                                    <Ionicons key={index} name='star' size={24} color="gold" />
+                                ))}
+
+                                <Text style={styles.ratingText}>(4.9)</Text>
+                            </View>
+
+                            <View style={styles.rating}>
+                                <TouchableOpacity onPress={() => increment()}>
+                                    <SimpleLineIcons name='plus' size={20} />
+                                </TouchableOpacity>
+                                <Text style={styles.ratingText}>{count}</Text>
+                                <TouchableOpacity onPress={() => decrement()}>
+                                    <SimpleLineIcons name='minus' size={20} />
+                                </TouchableOpacity>
+                            </View>
                         </View>
+
+                        <View style={styles.descriptionWrapper}>
+                            <Text style={styles.description}>Description</Text>
+                            <Text style={styles.descText}>
+                                {item.description}
+                            </Text>
+                        </View>
+
+                        <View style={{marginBottom: SIZES.small}}>
+                            <View style={styles.location}>
+                                <View style={{flexDirection: "row"}}>
+                                    <Ionicons name='location-outline' size={20} />
+                                    <Text>  {item.product_location}</Text>
+                                </View>
+
+                                <View style={{flexDirection: "row"}}>
+                                    <MaterialCommunityIcons name='truck-delivery-outline' size={20} />
+                                    <Text>  Free delivery   </Text>
+                                </View>
+                            </View>
+                        </View>
+
+                        <View style={styles.cartRow}>
+                            <TouchableOpacity onPress={() => handleBuy()} style={styles.cartBtn}>
+                                <Text style={styles.cartTitle}>BUY NOW</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity onPress={() => handleCart()} style={styles.addCart}>
+                                <Fontisto name='shopping-bag' size={22} color={COLORS.lightWhite} />
+                            </TouchableOpacity>
+                        </View>
+
                     </View>
                 </View>
-
-                <View style={styles.cartRow}>
-                    <TouchableOpacity onPress={() => handleBuy()} style={styles.cartBtn}>
-                        <Text style={styles.cartTitle}>BUY NOW</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity onPress={() => handleCart()} style={styles.addCart}>
-                        <Fontisto name='shopping-bag' size={22} color={COLORS.lightWhite} />
-                    </TouchableOpacity>
-                </View>
-
-            </View>
+                )}
+            
         </View>
     )
 }
