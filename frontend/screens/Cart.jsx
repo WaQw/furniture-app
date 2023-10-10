@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import styles from './cart.style'
 import { Ionicons, SimpleLineIcons } from '@expo/vector-icons'
 import fetchCart from '../hook/fetchCart'
-import { CartTile } from '../components'
+import { Button, CartTile } from '../components'
 import { COLORS } from '../constants'
 import { useState } from 'react'
 
@@ -33,6 +33,10 @@ const Cart = ({navigation}) => {
                     keyExtractor={(item) => item._id}
                     renderItem={({item}) => <CartTile item={item} onPress={() => {setSelect(!select), setSelected(item)}} select={select}/>}
                 />
+            )}
+
+            {select === false ? (<View></View>) : (
+                (<Button title={'Checkout'} isValid={select} onPress={() => {}} loader={false}/>)
             )}
 
         </SafeAreaView>
