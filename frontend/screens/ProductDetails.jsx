@@ -48,25 +48,32 @@ const ProductDetails = ({navigation}) => {
     }
 
     const checkout = async() => {
-        const id = await AsyncStorage.getItem('id')
-        const response = await fetch('https://payment-server-production-0699.up.railway.app/stripe/create-checkout-session', {
-            method: 'POST',
-            headers: {
-                'Content-Type':'application/json'
-            },
-            body: JSON.stringify({
-                userId: JSON.parse(id),
-                cartItems: [{
-                    name: item.title,
-                    id: item._id,
-                    price: item.price,
-                    cartQuantity: count,
-                }]
-            })
-        });
-
-        const {url} = await response.json();
-        setPaymentUrl(url)
+        try {
+            const id = await AsyncStorage.getItem('id');
+            const userId = JSON.parse(id);
+            const response = await fetch('https://payment-server-production-0699.up.railway.app/stripe/create-checkout-session', {
+                method: 'POST',
+                headers: {
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify({
+                    userId: userId,
+                    cartItems: [{
+                        name: item.title,
+                        id: item._id,
+                        price: item.price,
+                        cartQuantity: count,
+                    }]
+                })
+            });
+            if(!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const data = await response.json();
+            setPaymentUrl(data.url);
+        } catch (error) {
+            console.error("Error creating orders: ", error);
+        }
     }
 
     const onNavigationStateChange = (webViewState) => {
