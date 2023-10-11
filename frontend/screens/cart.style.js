@@ -57,6 +57,11 @@ const styles = StyleSheet.create({
         color: COLORS.gray,
         marginTop: 3,
         textTransform: "capitalize"
+    },
+    order: {
+        backgroundColor: COLORS.lightWhite,
+        paddingHorizontal: 30,
+        borderRadius: 12
     }
 })
 

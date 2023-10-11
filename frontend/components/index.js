@@ -6,6 +6,7 @@ import ProductList from "./products/ProductList";
 import BackBtn from "./BackBtn";
 import Button from "./Button";
 import CartTile from "./cart/cartTile";
+import OrderTile from "./OrderTile";
 
 export {
     Welcome,
@@ -15,5 +16,6 @@ export {
     ProductList,
     BackBtn,
     Button,
-    CartTile
+    CartTile,
+    OrderTile
 }
