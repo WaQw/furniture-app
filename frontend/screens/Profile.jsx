@@ -43,6 +43,18 @@ const Profile = ({navigation}) => {
             
         }
     }
+
+    const cacheClear = async() => {
+        const id = await AsyncStorage.getItem('id')
+        const userId = `favorites${JSON.parse(id)}`
+
+        try {
+            await AsyncStorage.removeItem(userId);
+            navigation.replace('Bottom Navigation')
+        } catch (error) {
+            
+        }
+    }
     
     const logout = () => {
         Alert.alert(
@@ -62,7 +74,7 @@ const Profile = ({navigation}) => {
             "Are you sure you want to delete all saved data on your device?",
             [
                 {text: "Cancel", onPress: () => console.log()},
-                {text: "Continue", onPress: () => console.log()},
+                {text: "Continue", onPress: () => cacheClear()},
                 {defaultIndex: 1}
             ]
         )
