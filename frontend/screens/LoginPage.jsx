@@ -36,45 +36,26 @@ const LoginPage = ({navigation}) => {
     }
 
     const login = async(values) => {
-        setLoader(true)
+        setLoader(true);
         try {
-            const endpoint = "http://localhost:3000/api/login"
+            const endpoint = "http://localhost:3000/api/login";
             const data = values;
 
-            const response = await axios.post(endpoint, data)
+            const response = await axios.post(endpoint, data);
             if(response.status === 200) {
-                setLoader(false);
                 setResponseData(response.data);
 
-                await AsyncStorage.setItem(`user${responseData._id}`, JSON.stringify(responseData))
-                await AsyncStorage.setItem('id', JSON.stringify(responseData._id))
-                await AsyncStorage.setItem('token', JSON.stringify(responseData.token))
-                navigation.replace('Bottom Navigation')
+                await AsyncStorage.setItem("id", JSON.stringify(responseData._id));
+                await AsyncStorage.setItem("token", JSON.stringify(responseData.token));
+                await AsyncStorage.setItem(`user${responseData._id}`, JSON.stringify(responseData));
 
-            } else {
-                Alert.alert(
-                    "Error logging in",
-                    "Please provide valid credentials",
-                    [
-                        {text: "Cancel", onPress: () => console.log()},
-                        {text: "Continue", onPress: () => console.log()},
-                        {defaultIndex: 1}
-                    ]
-                )
-            }
+                setLoader(false);
+                navigation.replace('Bottom Navigation');
+
+            } 
         } catch (error) {
-            Alert.alert(
-                "Error",
-                "Oops, Error logging in, try again with correct credentials!",
-                [
-                    {text: "Cancel", onPress: () => console.log()},
-                    {text: "Continue", onPress: () => console.log()},
-                    {defaultIndex: 1}
-                ]
-            )
-        } finally {
-            setLoader(false);
-        }
+            console.log(error)
+        } 
     };
 
     return (
